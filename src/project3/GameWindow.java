@@ -14,6 +14,7 @@ import java.util.stream.IntStream;
  * Created by roeje on 4/2/17.
  */
 public class GameWindow extends JFrame {
+    private static final int GRID_WIDTH = 5;
     private static GameEngine gameEngine;
     private JPanel panelMain;
     private JLabel WindowHeader;
@@ -105,7 +106,7 @@ public class GameWindow extends JFrame {
 
     private JButton getGridButton(int x, int y) {
 
-        int index = x * 5 + y;
+        int index = x * GRID_WIDTH + y;
         return buttonList.get(index);
     }
 
@@ -124,9 +125,15 @@ public class GameWindow extends JFrame {
 //                int row_num = Integer.parseInt(tmp[0]);
 //                int col_num = Integer.parseInt(tmp[1]);
 //                System.out.println("Button Clicked: " + row_num + "," + col_num);
-                System.out.println("Button Clicked: " + row + "," + col);
-                gameEngine.data.setActive(row * 5 + col);
-                System.out.println(gameEngine.data.getStatus(row * 5 + col));
+                int gridStatus = gameEngine.data.getStatus(row * GRID_WIDTH + col);
+                if (gridStatus == 0) {
+                    System.out.println("Button is not active: " + row + "," + col);
+                } else {
+                    System.out.println("Button Clicked: " + row + "," + col);
+                    gameEngine.data.setActive(row * GRID_WIDTH + col);
+                    System.out.println(gameEngine.data.getStatus(row * GRID_WIDTH + col));
+                }
+
             }
         });
         return button;
@@ -135,9 +142,9 @@ public class GameWindow extends JFrame {
     private void createGrid() {
         int row = 0;
         int col = 0;
-        JPanel grid = new JPanel(new GridLayout(-1, 5));
+        JPanel grid = new JPanel(new GridLayout(-1, GRID_WIDTH));
         for (int i = 0; i < numHoles; i++) {
-            col = i % 5;
+            col = i % GRID_WIDTH;
             if (col == 0 && i != 0) {
                 row++;
             }

@@ -8,7 +8,8 @@ import static java.lang.Thread.*;
 
 /**
  * Created by roeje on 4/2/17.
- * Controller class that handles logic necessary for interacting with the view, board model and spawning threads
+ *
+ * Controller class to handle logic necessary for interacting with the view, board model and thread management
  *
  */
 public final class GameEngine {
@@ -26,36 +27,36 @@ public final class GameEngine {
         sem = new Semaphore(numActive);
     }
 
-//    Runnable gameThread = new Runnable() {
-//        private int _id;
-//
-//        @Override
-//        public void run() {
-//            boolean access = false;
-//            String threadName = Thread.currentThread().getName();
-//            System.out.println(threadName);
-//            try {
-//                access = sem.tryAcquire(1, TimeUnit.SECONDS);
-//
-//                if (access) {
-//                    System.out.println("Accessing SEM");
-//                    sleep(5000);
-//
-//                } else {
-//                    System.out.println("Couldn't get the SEM");
-//                    sleep(5000);
-//                }
-//
-//            } catch (InterruptedException e) {
-//                throw new IllegalStateException(e);
-//
-//            } finally {
-//                if (access) {
-//                    sem.release();
-//                }
-//            }
-//        }
-//    };
+    Runnable gameThread = new Runnable() {
+        private int _id;
+
+        @Override
+        public void run() {
+            boolean access = false;
+            String threadName = Thread.currentThread().getName();
+            System.out.println(threadName);
+            try {
+                access = sem.tryAcquire(1, TimeUnit.SECONDS);
+
+                if (access) {
+                    System.out.println("Accessing SEM");
+                    sleep(5000);
+
+                } else {
+                    System.out.println("Couldn't get the SEM...");
+                    sleep(5000);
+                }
+
+            } catch (InterruptedException e) {
+                throw new IllegalStateException(e);
+
+            } finally {
+                if (access) {
+                    sem.release();
+                }
+            }
+        }
+    };
 
     public void start() {
 

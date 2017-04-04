@@ -48,6 +48,7 @@ public class GameWindow extends JFrame {
                     numActive = Integer.parseInt(textFieldMoles.getText());
                     initializeController(numHoles, numActive);
                     createGrid();
+                    startAutoRefresh();
 
                 } catch (NumberFormatException error) {
                     labelStartError.setVisible(true);
@@ -111,10 +112,12 @@ public class GameWindow extends JFrame {
     }
 
     private JButton createButton(int row, int col) {
-        final JButton button  = new JButton("row" + row+",col"+ col);
+
+        final JButton button = new JButton("Button");
+
         button.setName(row + "," + col);
-//        button.putClientProperty("row", row);
-//        button.putClientProperty("col", col);
+//              button.putClientProperty("row", row);
+//              button.putClientProperty("col", col);
         button.addActionListener(new ActionListener() {
 
             /*Action for grid button click*/
@@ -136,6 +139,9 @@ public class GameWindow extends JFrame {
 
             }
         });
+
+
+
         return button;
     }
 
@@ -156,9 +162,29 @@ public class GameWindow extends JFrame {
 
     }
 
+    private void refreshGridButtons() {
+        buttonList.forEach(button -> {
+            System.out.println(button.toString());
+        });
+//        int status = gameEngine.data.getStatus(row * GRID_WIDTH + col);
+    }
+
     private void initializeController(int numHoles, int numActive) {
         gameEngine = new GameEngine(numHoles, numActive);
         gameEngine.start();
+    }
+
+    public void startAutoRefresh() {
+        Timer timer = new Timer(0, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                refreshGridButtons();
+            }
+        });
+
+        timer.setDelay(1000); // delay for 30 seconds
+        timer.start();
     }
 
     public static void main(String[] args) {

@@ -21,33 +21,39 @@ public class GameThread implements Runnable {
         this.data = data;
     }
 
+    public void randomAction() throws InterruptedException {
+        data.setActive(id);
+        sleep(5000);
+        data.setInactive(id);
+    }
 
 
     @Override
     public void run() {
         boolean access = false;
+
         String threadName = Thread.currentThread().getName();
         System.out.println(threadName);
-        try {
-            access = sem.tryAcquire(1, TimeUnit.SECONDS);
+        while(true) {
+            try {
+                access = sem.tryAcquire(1, TimeUnit.SECONDS);
 
-            if (access) {
-                System.out.println("Accessing SEM from thread with id: " + id);
-                sleep(5000);
-                sem.release();
+                if (access) {
+                    System.out.println("Accessing SEM from thread with id: " + id);
+                    randomAction();
 
-            } else {
-                System.out.println("Couldn't get the SEM");
-                sleep(5000);
-                sem.release();
-            }
+                } else {
+                    System.out.println("Couldn't get the SEM");
+                    sleep(5000);
+                }
 
-        } catch (InterruptedException e) {
-            throw new IllegalStateException(e);
+            } catch (InterruptedException e) {
+                throw new IllegalStateException(e);
 
-        } finally {
-            if (access) {
-                sem.release();
+            } finally {
+                if (access) {
+                    sem.release();
+                }
             }
         }
     }

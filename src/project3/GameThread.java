@@ -1,11 +1,60 @@
 package project3;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+
+import static java.lang.Thread.sleep;
+
 /**
- * Created by roeje on 4/2/17.
+ * Created by roeje on 4/3/2017.
  */
-final class GameThread implements Runnable{
+public class GameThread implements Runnable {
+    private final int id;
+    private final Semaphore sem;
+    private final GameBoard data;
+
+
+    public GameThread(final int id, final Semaphore sem, final GameBoard data) {
+        this.id = id;
+        this.sem = sem;
+        this.data = data;
+    }
+
+    public void randomAction() throws InterruptedException {
+        data.setActive(id);
+        sleep(5000);
+        data.setInactive(id);
+    }
+
+
     @Override
     public void run() {
+        boolean access = false;
 
+        String threadName = Thread.currentThread().getName();
+        System.out.println(threadName);
+        while(true) {
+            try {
+                access = sem.tryAcquire(1, TimeUnit.SECONDS);
+
+                if (access) {
+                    System.out.println("Accessing SEM from thread with id: " + id);
+                    randomAction();
+
+                } else {
+                    System.out.println("Couldn't get the SEM");
+                    sleep(5000);
+                }
+
+            } catch (InterruptedException e) {
+                throw new IllegalStateException(e);
+
+            } finally {
+                if (access) {
+                    sem.release();
+                }
+            }
+        }
     }
 }

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="project3.GameWindow">
-  <grid id="27dc6" binding="panelMain" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="panelMain" layout-manager="GridLayoutManager" row-count="7" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="20" y="20" width="514" height="400"/>
     </constraints>
-    <properties/>
+    <properties>
+      <enabled value="true"/>
+    </properties>
     <border type="none"/>
     <children>
       <component id="54c92" class="javax.swing.JLabel" binding="WindowHeader">
@@ -22,7 +24,7 @@
         </constraints>
         <properties>
           <labelFor value="58f23"/>
-          <text value="Number of Holes"/>
+          <text value="Number of Holes:"/>
         </properties>
       </component>
       <component id="58f23" class="javax.swing.JTextField" binding="textFieldHoles">
@@ -39,7 +41,7 @@
         </constraints>
         <properties>
           <labelFor value="1507b"/>
-          <text value="Number of Active Moles"/>
+          <text value="Number of Active Moles:"/>
         </properties>
       </component>
       <component id="1507b" class="javax.swing.JTextField" binding="textFieldMoles">
@@ -52,12 +54,67 @@
       </component>
       <grid id="37c52" binding="panelGameGrid" layout-manager="GridBagLayout">
         <constraints>
-          <grid row="3" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none"/>
         <children/>
       </grid>
+      <component id="341af" class="javax.swing.JButton" binding="buttonStart">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Start/Restart Game"/>
+        </properties>
+      </component>
+      <grid id="b0eba" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="e19d9" class="javax.swing.JButton" binding="quitButton" default-binding="true">
+            <constraints>
+              <grid row="0" column="0" row-span="3" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Quit"/>
+            </properties>
+          </component>
+          <component id="d9908" class="javax.swing.JLabel" binding="labelNumberHit">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Number of Hits: "/>
+            </properties>
+          </component>
+          <component id="23c91" class="javax.swing.JLabel" binding="labelNumberMissed">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Number of Misses: "/>
+            </properties>
+          </component>
+          <hspacer id="889e2">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+        </children>
+      </grid>
+      <component id="b64c0" class="javax.swing.JLabel" binding="labelStartError">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Error with inputs please try again"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>

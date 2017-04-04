@@ -21,6 +21,8 @@ public class GameThread implements Runnable {
         this.data = data;
     }
 
+
+
     @Override
     public void run() {
         boolean access = false;
@@ -32,10 +34,12 @@ public class GameThread implements Runnable {
             if (access) {
                 System.out.println("Accessing SEM from thread with id: " + id);
                 sleep(5000);
+                sem.release();
 
             } else {
                 System.out.println("Couldn't get the SEM");
                 sleep(5000);
+                sem.release();
             }
 
         } catch (InterruptedException e) {

@@ -13,6 +13,10 @@ public class GameBoard {
         data = new int[size];
     }
 
+    public int[] getData() {
+        return data;
+    }
+
     public void setActive(int index) {
         data[index] = 1;
     }

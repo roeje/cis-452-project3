@@ -1,10 +1,14 @@
 package project3;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Created by roeje on 4/2/17.
@@ -25,6 +29,11 @@ public class GameWindow extends JFrame {
     private JButton buttonTest1;
     private JLabel labelStartError;
 
+    private int numHoles;
+    private int numActive;
+
+    private final List<JButton> buttonList = new ArrayList<JButton>();
+
     public GameWindow() {
 
         labelStartError.setVisible(false);
@@ -34,9 +43,11 @@ public class GameWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 labelStartError.setVisible(false);
                 try {
-                    int numHoles = Integer.parseInt(textFieldHoles.getText());
-                    int numActive = Integer.parseInt(textFieldMoles.getText());
+                    numHoles = Integer.parseInt(textFieldHoles.getText());
+                    numActive = Integer.parseInt(textFieldMoles.getText());
                     initializeController(numHoles, numActive);
+                    createGrid();
+
                 } catch (NumberFormatException error) {
                     labelStartError.setVisible(true);
                 }
@@ -49,12 +60,6 @@ public class GameWindow extends JFrame {
                 System.out.println("Exiting Game");
                 gameEngine.shutdown();
                 System.exit(0);
-            }
-        });
-        buttonTest1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
             }
         });
 
@@ -98,10 +103,55 @@ public class GameWindow extends JFrame {
         });
     }
 
+    private JButton getGridButton(int x, int y) {
+
+        int index = x * 5 + y;
+        return buttonList.get(index);
+    }
+
+    private JButton createButton(int row, int col) {
+        final JButton button  = new JButton("row" + row+",col"+ col);
+        button.setName(row + "," + col);
+//        button.putClientProperty("row", row);
+//        button.putClientProperty("col", col);
+        button.addActionListener(new ActionListener() {
+
+            /*Action for grid button click*/
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                String name = ((JButton)e.getSource()).getName();
+//                String[] tmp = name.split(",");
+//                int row_num = Integer.parseInt(tmp[0]);
+//                int col_num = Integer.parseInt(tmp[1]);
+//                System.out.println("Button Clicked: " + row_num + "," + col_num);
+                System.out.println("Button Clicked: " + row + "," + col);
+                gameEngine.data.setActive(row * 5 + col);
+                System.out.println(gameEngine.data.getStatus(row * 5 + col));
+            }
+        });
+        return button;
+    }
+
+    private void createGrid() {
+        int row = 0;
+        int col = 0;
+        JPanel grid = new JPanel(new GridLayout(-1, 5));
+        for (int i = 0; i < numHoles; i++) {
+            col = i % 5;
+            if (col == 0 && i != 0) {
+                row++;
+            }
+            JButton button = createButton(row, col);
+            buttonList.add(button);
+            grid.add(button);
+        }
+        panelGameGrid.add(grid);
+
+    }
+
     private void initializeController(int numHoles, int numActive) {
         gameEngine = new GameEngine(numHoles, numActive);
         gameEngine.start();
-
     }
 
     public static void main(String[] args) {
@@ -115,6 +165,7 @@ public class GameWindow extends JFrame {
         mainFrame.pack();
         mainFrame.setVisible(true);
     }
+
 }
 
 

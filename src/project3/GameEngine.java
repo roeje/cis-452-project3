@@ -21,6 +21,7 @@ public final class GameEngine {
     public GameEngine(int numHoles, int numActive) {
         this.numHoles = numHoles;
         this.numActive = numActive;
+        data = new GameBoard(numHoles);
         exe = Executors.newFixedThreadPool(numHoles);
         sem = new Semaphore(numActive);
     }

@@ -29,6 +29,7 @@ public class GameWindow extends JFrame {
     private JLabel labelNumberMissed;
     private JButton buttonTest1;
     private JLabel labelStartError;
+    private JLabel labelNumClicks;
 
     private int numHoles;
     private int numActive;
@@ -129,18 +130,19 @@ public class GameWindow extends JFrame {
 //                int col_num = Integer.parseInt(tmp[1]);
 //                System.out.println("Button Clicked: " + row_num + "," + col_num);
                 int gridStatus = gameEngine.data.getStatus(row * GRID_WIDTH + col);
+                gameEngine.data.incrementClicks();
                 if (gridStatus == 0) {
                     System.out.println("Button is not active: " + row + "," + col);
+                    gameEngine.data.incrementMisses();
                 } else {
                     System.out.println("Button Clicked: " + row + "," + col);
-                    gameEngine.data.setActive(row * GRID_WIDTH + col);
+                    gameEngine.data.setInactive(row * GRID_WIDTH + col);
+                    gameEngine.data.incrementHits();
                     System.out.println(gameEngine.data.getStatus(row * GRID_WIDTH + col));
                 }
 
             }
         });
-
-
 
         return button;
     }
@@ -163,10 +165,22 @@ public class GameWindow extends JFrame {
     }
 
     private void refreshGridButtons() {
-        buttonList.forEach(button -> {
-            System.out.println(button.toString());
-        });
+//        buttonList.forEach(button -> {
+//            System.out.println(button.toString());
+//        });
 //        int status = gameEngine.data.getStatus(row * GRID_WIDTH + col);
+        for(int i = 0; i < buttonList.size(); i++) {
+            int status = gameEngine.data.getStatus(i);
+            if(status == 0) {
+                buttonList.get(i).setText("---");
+            } else {
+                buttonList.get(i).setText("Active");
+            }
+
+            labelNumberHit.setText("Number of hits: " + gameEngine.data.getNumHits());
+            labelNumberMissed.setText("Number of misses: " + gameEngine.data.getNumMisses());
+            labelNumClicks.setText("Number of clicks: " + gameEngine.data.getTotalClicks());
+        }
     }
 
     private void initializeController(int numHoles, int numActive) {
@@ -183,7 +197,7 @@ public class GameWindow extends JFrame {
             }
         });
 
-        timer.setDelay(1000); // delay for 30 seconds
+        timer.setDelay(500); // delay for 30 seconds
         timer.start();
     }
 

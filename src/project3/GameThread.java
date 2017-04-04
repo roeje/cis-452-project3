@@ -2,6 +2,7 @@ package project3;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.sleep;
@@ -14,7 +15,6 @@ public class GameThread implements Runnable {
     private final Semaphore sem;
     private final GameBoard data;
 
-
     public GameThread(final int id, final Semaphore sem, final GameBoard data) {
         this.id = id;
         this.sem = sem;
@@ -22,11 +22,23 @@ public class GameThread implements Runnable {
     }
 
     public void randomAction() throws InterruptedException {
+
+        int count = 0;
+
+        int maxWait = random(1, 8);
+
         data.setActive(id);
-        sleep(5000);
+        while(data.getStatus(id) != 0 && count <= maxWait) {
+            sleep(1000);
+            count++;
+        }
         data.setInactive(id);
     }
 
+    public int random(int min, int max) {
+        int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
+        return randomNum;
+    }
 
     @Override
     public void run() {
@@ -43,8 +55,9 @@ public class GameThread implements Runnable {
                     randomAction();
 
                 } else {
-                    System.out.println("Couldn't get the SEM");
-                    sleep(5000);
+                    System.out.println("Couldn't get the SEM: " + id);
+                    continue;
+//                    sleep(random(2000, 10000));
                 }
 
             } catch (InterruptedException e) {
@@ -53,6 +66,11 @@ public class GameThread implements Runnable {
             } finally {
                 if (access) {
                     sem.release();
+                    try {
+                        sleep(random(500, 2000));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

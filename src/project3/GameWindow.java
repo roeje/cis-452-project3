@@ -1,14 +1,15 @@
 package project3;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 /**
  * Created by roeje on 4/2/17.
@@ -17,7 +18,6 @@ public class GameWindow extends JFrame {
     private static final int GRID_WIDTH = 5;
     private static GameEngine gameEngine;
     private JPanel panelMain;
-    private JLabel WindowHeader;
     private JLabel labelHoleField;
     private JTextField textFieldHoles;
     private JLabel labelMoleField;
@@ -30,13 +30,18 @@ public class GameWindow extends JFrame {
     private JButton buttonTest1;
     private JLabel labelStartError;
     private JLabel labelNumClicks;
+    private JLabel labelMain;
 
     private int numHoles;
     private int numActive;
 
-    private final List<JButton> buttonList = new ArrayList<JButton>();
+    private List<JButton> buttonList = new ArrayList<JButton>();
 
-    public GameWindow() {
+    private final Image deathStar = ImageIO.read(getClass().getResource("/resources/death_star_100px.png"));
+    private final Image warpHole = ImageIO.read(getClass().getResource("/resources/warp_hole_100px.png"));
+
+
+    public GameWindow() throws IOException {
 
         labelStartError.setVisible(false);
 
@@ -114,21 +119,17 @@ public class GameWindow extends JFrame {
 
     private JButton createButton(int row, int col) {
 
-        final JButton button = new JButton("Button");
+        final JButton button = new JButton();
 
         button.setName(row + "," + col);
-//              button.putClientProperty("row", row);
-//              button.putClientProperty("col", col);
+        button.setIcon(new ImageIcon(warpHole));
+//        button.setSize(50, 50);
+        button.setBackground(Color.black);
         button.addActionListener(new ActionListener() {
 
             /*Action for grid button click*/
             @Override
             public void actionPerformed(ActionEvent e) {
-//                String name = ((JButton)e.getSource()).getName();
-//                String[] tmp = name.split(",");
-//                int row_num = Integer.parseInt(tmp[0]);
-//                int col_num = Integer.parseInt(tmp[1]);
-//                System.out.println("Button Clicked: " + row_num + "," + col_num);
                 int gridStatus = gameEngine.data.getStatus(row * GRID_WIDTH + col);
                 gameEngine.data.incrementClicks();
                 if (gridStatus == 0) {
@@ -150,6 +151,8 @@ public class GameWindow extends JFrame {
     private void createGrid() {
         int row = 0;
         int col = 0;
+        panelGameGrid.removeAll();
+        buttonList = new ArrayList<JButton>();
         JPanel grid = new JPanel(new GridLayout(-1, GRID_WIDTH));
         for (int i = 0; i < numHoles; i++) {
             col = i % GRID_WIDTH;
@@ -172,9 +175,11 @@ public class GameWindow extends JFrame {
         for(int i = 0; i < buttonList.size(); i++) {
             int status = gameEngine.data.getStatus(i);
             if(status == 0) {
-                buttonList.get(i).setText("---");
+//                buttonList.get(i).setText("---");
+                buttonList.get(i).setIcon(new ImageIcon(warpHole));
             } else {
-                buttonList.get(i).setText("Active");
+//                buttonList.get(i).setText("Active");
+                buttonList.get(i).setIcon(new ImageIcon(deathStar));
             }
 
             labelNumberHit.setText("Number of hits: " + gameEngine.data.getNumHits());
@@ -201,10 +206,7 @@ public class GameWindow extends JFrame {
         timer.start();
     }
 
-    public static void main(String[] args) {
-
-
-
+    public static void main(String[] args) throws IOException {
 
         JFrame mainFrame = new JFrame("GameWindow");
         mainFrame.setContentPane(new GameWindow().panelMain);

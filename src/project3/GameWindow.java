@@ -23,7 +23,7 @@ import java.util.List;
  * @version 04/1/2017
  */
 public class GameWindow extends JFrame {
-    private static final int GRID_WIDTH = 5;
+
     private static GameEngine gameEngine;
     private JPanel panelMain;
     private JLabel labelHoleField;
@@ -43,10 +43,13 @@ public class GameWindow extends JFrame {
     private JTextField textFieldGameTime;
     private JLabel labelGameTime;
     private JLabel labelFieldWinner;
+    private JTextField textFieldGridWidth;
+    private JLabel labelGridWidth;
 
     private int numHoles;
     private int numActive;
     private int gameTimer;
+    private int gridWidth;
 
     private List<JButton> buttonList = new ArrayList<JButton>();
 
@@ -68,6 +71,7 @@ public class GameWindow extends JFrame {
                     numHoles = Integer.parseInt(textFieldHoles.getText());
                     numActive = Integer.parseInt(textFieldMoles.getText());
                     gameTimer = Integer.parseInt(textFieldGameTime.getText());
+                    gridWidth = Integer.parseInt(textFieldGridWidth.getText());
                     initializeController(numHoles, numActive);
                     createGrid();
                     startGameTimer();
@@ -128,7 +132,7 @@ public class GameWindow extends JFrame {
     }
 
     private JButton getGridButton(int x, int y) {
-        int index = x * GRID_WIDTH + y;
+        int index = x * gridWidth + y;
         return buttonList.get(index);
     }
 
@@ -143,16 +147,16 @@ public class GameWindow extends JFrame {
             /*Action for grid button click*/
             @Override
             public void actionPerformed(ActionEvent e) {
-                int gridStatus = gameEngine.data.getStatus(row * GRID_WIDTH + col);
+                int gridStatus = gameEngine.data.getStatus(row * gridWidth + col);
                 gameEngine.data.incrementClicks();
                 if (gridStatus == 0) {
                     System.out.println("Button is not active: " + row + "," + col);
                     gameEngine.data.incrementMisses();
                 } else {
                     System.out.println("Button Clicked: " + row + "," + col);
-                    gameEngine.data.setInactive(row * GRID_WIDTH + col);
+                    gameEngine.data.setInactive(row * gridWidth + col);
                     gameEngine.data.incrementHits();
-                    System.out.println(gameEngine.data.getStatus(row * GRID_WIDTH + col));
+                    System.out.println(gameEngine.data.getStatus(row * gridWidth + col));
                 }
 
             }
@@ -165,9 +169,9 @@ public class GameWindow extends JFrame {
         int col = 0;
         panelGameGrid.removeAll();
         buttonList = new ArrayList<JButton>();
-        JPanel grid = new JPanel(new GridLayout(-1, GRID_WIDTH));
+        JPanel grid = new JPanel(new GridLayout(-1, gridWidth));
         for (int i = 0; i < numHoles; i++) {
-            col = i % GRID_WIDTH;
+            col = i % gridWidth;
             if (col == 0 && i != 0) {
                 row++;
             }
@@ -182,7 +186,7 @@ public class GameWindow extends JFrame {
 //        buttonList.forEach(button -> {
 //            System.out.println(button.toString());
 //        });
-//        int status = gameEngine.data.getStatus(row * GRID_WIDTH + col);
+//        int status = gameEngine.data.getStatus(row * gridWidth + col);
         for(int i = 0; i < buttonList.size(); i++) {
             int status = gameEngine.data.getStatus(i);
             if(status == 0) {

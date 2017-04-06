@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by roeje on 4/2/17.
+ * CIS 452 - Project 3: Concurrency in Game Design
  *
- * View class that creates and updates the GUI, accepts user input, and displays the current state of the game board
+ * GameWindow: View class that creates and updates the GUI, accepts user input, and displays the current state of the game board
  *
  * This class utilizes the Intellij UI builder library
  * so some of the UI elements are contained in a separate ".form" class
@@ -24,6 +24,7 @@ import java.util.List;
  */
 public class GameWindow extends JFrame {
 
+    /*Gui elements and global vars*/
     private static GameEngine gameEngine;
     private JPanel panelMain;
     private JLabel labelHoleField;
@@ -56,7 +57,13 @@ public class GameWindow extends JFrame {
     private final Image deathStar = ImageIO.read(getClass().getResource("/resources/death_star_100px.png"));
     private final Image warpHole = ImageIO.read(getClass().getResource("/resources/warp_hole_100px.png"));
 
-
+    /**
+     * Constructor for the GameWindow class
+     * <p>
+     *
+     * @throws IOException
+     * @return none
+     */
     public GameWindow() throws IOException {
 
         labelStartError.setVisible(false);
@@ -131,11 +138,27 @@ public class GameWindow extends JFrame {
         });
     }
 
+    /**
+     * Accessor for the buttonList vector of JButtons
+     * <p>
+     *
+     * @param x, the row, y, the col
+     * @return JButton
+     */
     private JButton getGridButton(int x, int y) {
+
+        /*Convert row and col to single int index for vector*/
         int index = x * gridWidth + y;
         return buttonList.get(index);
     }
 
+    /**
+     * Creates a single JButton and action listener based on a specified row and col from game grid
+     * <p>
+     *
+     * @param row, col
+     * @return JButton
+     */
     private JButton createButton(int row, int col) {
         final JButton button = new JButton();
         button.setName(row + "," + col);
@@ -164,11 +187,21 @@ public class GameWindow extends JFrame {
         return button;
     }
 
+    /**
+     * Create game grid and buttons. Attach to game panel
+     * <p>
+     *
+     * @param  none
+     * @throws none
+     * @return none
+     */
     private void createGrid() {
         int row = 0;
         int col = 0;
         panelGameGrid.removeAll();
         buttonList = new ArrayList<JButton>();
+
+        /*Create grid layout and attach each button*/
         JPanel grid = new JPanel(new GridLayout(-1, gridWidth));
         for (int i = 0; i < numHoles; i++) {
             col = i % gridWidth;
@@ -182,20 +215,29 @@ public class GameWindow extends JFrame {
         panelGameGrid.add(grid);
     }
 
+    /**
+     * Method to refresh the button grid.
+     * Grid is redrawn and stat labels are updated
+     * <p>
+     *
+     * @throws none
+     * @param none
+     * @return none
+     */
     private void refreshGridButtons() {
-//        buttonList.forEach(button -> {
-//            System.out.println(button.toString());
-//        });
-//        int status = gameEngine.data.getStatus(row * gridWidth + col);
+
+        /*Iterate over buttonList and update state of each button*/
         for(int i = 0; i < buttonList.size(); i++) {
             int status = gameEngine.data.getStatus(i);
             if(status == 0) {
-//                buttonList.get(i).setText("---");
+
                 buttonList.get(i).setIcon(new ImageIcon(warpHole));
             } else {
-//                buttonList.get(i).setText("Active");
+
                 buttonList.get(i).setIcon(new ImageIcon(deathStar));
             }
+
+            /*Update labels with stats from GameBoard*/
             labelNumberHit.setText("Number of hits: " + gameEngine.data.getNumHits());
             labelNumberMissed.setText("Number of misses: " + gameEngine.data.getNumMissClicks());
             labelNumClicks.setText("Number of clicks: " + gameEngine.data.getTotalClicks());
@@ -203,11 +245,27 @@ public class GameWindow extends JFrame {
         }
     }
 
+    /**
+     * Create controller instance with user defined values
+     * <p>
+     *
+     * @throws none
+     * @param numHoles, numActive
+     * @return none
+     */
     private void initializeController(int numHoles, int numActive) {
         gameEngine = new GameEngine(numHoles, numActive);
         gameEngine.start();
     }
 
+    /**
+     * Create timer for auto refresh, start timer and call refresh function every 0.1 second
+     * <p>
+     *
+     * @throws none
+     * @param none
+     * @return none
+     */
     public void startAutoRefresh() {
         Timer timer = new Timer(0, new ActionListener() {
             @Override
@@ -215,10 +273,18 @@ public class GameWindow extends JFrame {
                 refreshGridButtons();
             }
         });
-        timer.setDelay(100); // delay for 1 second
+        timer.setDelay(100); // delay for 0.1 second
         timer.start();
     }
 
+    /**
+     * Create game timer, start, and call shutdown on ExeService when timer has expired
+     * <p>
+     *
+     * @throws none
+     * @param none
+     * @return none
+     */
     public void startGameTimer() {
         Timer timer = new Timer(gameTimer * 1000 , new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -231,6 +297,14 @@ public class GameWindow extends JFrame {
         timer.start();
     }
 
+    /**
+     * Main method for gui setup
+     * <p>
+     *
+     * @throws IOException
+     * @param args
+     * @return none
+     */
     public static void main(String[] args) throws IOException {
         JFrame mainFrame = new JFrame("GameWindow");
         mainFrame.setContentPane(new GameWindow().panelMain);

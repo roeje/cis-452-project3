@@ -20,12 +20,28 @@ public class GameThread implements Runnable {
     private Semaphore sem;
     private GameBoard data;
 
+    /**
+     * Constructor for GameThread, assign globals from passed values
+     * <p>
+     *
+     * @throws none
+     * @param id, sem, data
+     * @return none
+     */
     public GameThread(final int id, Semaphore sem, GameBoard data) {
         this.id = id;
         this.sem = sem;
         this.data = data;
     }
 
+    /**
+     * Logic method for random action on game board
+     * <p>
+     *
+     * @throws InterruptedException
+     * @param none
+     * @return none
+     */
     public void randomAction() throws InterruptedException {
 
         int count = 0;
@@ -58,11 +74,27 @@ public class GameThread implements Runnable {
         }
     }
 
+    /**
+     * Helper method for generating a random number
+     * <p>
+     *
+     * @throws none
+     * @param min, max
+     * @return int
+     */
     public int random(int min, int max) {
         int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
         return randomNum;
     }
 
+    /**
+     * Implement required run method, handles game board access with Semaphore
+     * <p>
+     *
+     * @throws none
+     * @param none
+     * @return none
+     */
     @Override
     public void run() {
         boolean access = false;
@@ -71,6 +103,8 @@ public class GameThread implements Runnable {
         System.out.println(threadName);
         while(true) {
             try {
+
+                /*Try to acquire semaphore*/
                 access = sem.tryAcquire(1, TimeUnit.SECONDS);
 
                 if (access) {

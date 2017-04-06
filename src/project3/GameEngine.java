@@ -4,9 +4,9 @@ import java.util.concurrent.*;
 import java.util.stream.IntStream;
 
 /**
- * Created by roeje on 4/1/17.
+ * CIS 452 - Project 3: Concurrency in Game Design
  *
- * Controller class to handle logic/structures necessary for thread management
+ * GameEngine: Controller class to handle logic/structures necessary for thread management
  *
  * @author  Jesse Roe
  * @version 04/1/2017
@@ -18,6 +18,14 @@ public final class GameEngine {
     private int numHoles;
     private int numActive;
 
+    /**
+     * Constructor for GameEngine, sets up global vars
+     * <p>
+     *
+     * @throws none
+     * @param numHoles, numActive
+     * @return none
+     */
     public GameEngine(int numHoles, int numActive) {
 
         /* Define variables based on input from GUI */
@@ -28,7 +36,14 @@ public final class GameEngine {
         sem = new Semaphore(numActive);
     }
 
-    /* Spawn off threads based on defined number of holes */
+    /**
+     * Spawn off threads based on defined number of holes
+     * <p>
+     *
+     * @throws none
+     * @param none
+     * @return none
+     */
     public void start() {
 
         /*Trigger on user input and after the*/
@@ -36,7 +51,14 @@ public final class GameEngine {
 
     }
 
-    /* Handle shutdown of executor service and any sleeping threads*/
+    /**
+     * Handle graceful shutdown of executor service and any sleeping threads
+     * <p>
+     *
+     * @throws none
+     * @param none
+     * @return none
+     */
     public void shutdown() {
 
         try {

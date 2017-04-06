@@ -9,6 +9,11 @@ import static java.lang.Thread.sleep;
 
 /**
  * Created by roeje on 4/3/2017.
+ *
+ * Thread class that implements Runnable, defines logic for each game thread
+ *
+ * @author  Jesse Roe
+ * @version 04/1/2017
  */
 public class GameThread implements Runnable {
     private final int id;
@@ -24,15 +29,33 @@ public class GameThread implements Runnable {
     public void randomAction() throws InterruptedException {
 
         int count = 0;
+        int maxWait = random(10, 80);
+        int actionFail = random(1, 100);
 
-        int maxWait = random(1, 8);
+        /*20% of the time, the mole doesn't appear*/
+        if (actionFail > 20) {
+            data.setActive(id);
+            while (data.getStatus(id) != 0 && count <= maxWait) {
+                try {
+                    sleep(100);
+                    count++;
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
 
-        data.setActive(id);
-        while(data.getStatus(id) != 0 && count <= maxWait) {
-            sleep(1000);
-            count++;
+            /*User didn't click in time*/
+            if (count > maxWait) {
+                data.incrementMissedHits();
+            }
+            data.setInactive(id);
+        } else {
+            try {
+                sleep(random(1000, 5000));
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
-        data.setInactive(id);
     }
 
     public int random(int min, int max) {
@@ -57,7 +80,6 @@ public class GameThread implements Runnable {
                 } else {
                     System.out.println("Couldn't get the SEM: " + id);
                     continue;
-//                    sleep(random(2000, 10000));
                 }
 
             } catch (InterruptedException e) {
@@ -69,7 +91,7 @@ public class GameThread implements Runnable {
                     try {
                         sleep(random(500, 2000));
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Thread.currentThread().interrupt();
                     }
                 }
             }

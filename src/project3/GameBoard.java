@@ -1,21 +1,25 @@
 package project3;
 
-import java.util.Vector;
-
 /**
- * Created by roeje on 4/2/17.
+ * CIS 452 - Project 3: Concurrency in Game Design
+ *
+ * Model class to store the game board array and various statistical data.
+ *
+ * @author  Jesse Roe
+ * @version 04/1/2017
  */
 public class GameBoard {
 
     private final int[] data;
     private int numHits;
-    private int numMisses;
+    private int numMissClicks;
     private int totalClicks;
+    private int numMissedHits;
 
     public GameBoard(int size) {
         data = new int[size];
         numHits = 0;
-        numMisses = 0;
+        numMissClicks = 0;
         totalClicks = 0;
     }
 
@@ -39,8 +43,8 @@ public class GameBoard {
         return numHits;
     }
 
-    public int getNumMisses() {
-        return numMisses;
+    public int getNumMissClicks() {
+        return numMissClicks;
     }
 
     public void incrementHits() {
@@ -48,7 +52,7 @@ public class GameBoard {
     }
 
     public void incrementMisses() {
-        numMisses++;
+        numMissClicks++;
     }
 
     public int getTotalClicks() {
@@ -58,4 +62,17 @@ public class GameBoard {
     public void incrementClicks() {
         totalClicks++;
     }
+
+    public int getNumMissedHits() {
+        return numMissedHits;
+    }
+
+    public void setNumMissedHits(int numMissedHits) {
+        this.numMissedHits = numMissedHits;
+    }
+
+    public void incrementMissedHits() {
+        numMissedHits++;
+    }
+
 }

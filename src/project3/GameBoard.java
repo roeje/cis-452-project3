@@ -10,7 +10,7 @@ package project3;
  */
 public class GameBoard {
 
-    private final int[] data;
+    private int[] data;
     private int numHits;
     private int numMissClicks;
     private int totalClicks;

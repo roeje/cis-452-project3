@@ -13,10 +13,10 @@ import java.util.stream.IntStream;
  */
 public final class GameEngine {
     public GameBoard data;
-    public ExecutorService exe;
+    private ExecutorService exe;
     public Semaphore sem;
-    int numHoles;
-    int numActive;
+    private int numHoles;
+    private int numActive;
 
     public GameEngine(int numHoles, int numActive) {
 

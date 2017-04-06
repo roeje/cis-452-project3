@@ -17,10 +17,10 @@ import static java.lang.Thread.sleep;
  */
 public class GameThread implements Runnable {
     private final int id;
-    private final Semaphore sem;
-    private final GameBoard data;
+    private Semaphore sem;
+    private GameBoard data;
 
-    public GameThread(final int id, final Semaphore sem, final GameBoard data) {
+    public GameThread(final int id, Semaphore sem, GameBoard data) {
         this.id = id;
         this.sem = sem;
         this.data = data;
